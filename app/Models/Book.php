@@ -42,16 +42,16 @@ class Book extends Model
     //Decrease available copies when borrowed
     public function borrow(): void
     {
-        if ($this->abailable_copies > 0) {
-            $this->decrement('abailable_copies');
+        if ($this->available_copies > 0) {
+            $this->decrement('available_copies');
         }
     }
 
     //Increase available copies when return the book
     public function returnBook(): void
     {
-        if ($this->abailable_copies < $this->total_copies) {
-            $this->increment('abailable_copies');
+        if ($this->available_copies < $this->total_copies) {
+            $this->increment('available_copies');
         }
     }
 }
