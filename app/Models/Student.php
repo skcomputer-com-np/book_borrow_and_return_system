@@ -2,10 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Student extends Model
 {
@@ -36,6 +35,6 @@ class Student extends Model
 
     public function activeBorrowings(): HasMany
     {
-        return $this->borrowings()->borrowed();
+        return $this->borrowings()->where('status', 'borrowed');
     }
 }
