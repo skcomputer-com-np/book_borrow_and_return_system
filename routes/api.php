@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AuthorController;
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\BorrowTransactionController;
@@ -11,14 +12,21 @@ Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
 
-Route::apiResource('authors', AuthorController::class);
-Route::apiResource('books', BookController::class);
-Route::apiResource('students', StudentController::class);
-Route::apiResource('borrow_transactions', BorrowTransactionController::class)->only(['index', 'store', 'show']);
+Route::post('/register', [AuthController::class, 'register']);
+Route::post('/login', [AuthController::class, 'login']);
 
-//overdue and return route
-Route::post(
-    'borrow_transactions/{borrow_transaction}/return',
-    [BorrowTransactionController::class, 'returnBook']
-);
-Route::get('borrow_transactions/overdue/list', [BorrowTransactionController::class, 'overdue']);
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/user', [AuthController::class, 'user']);
+    Route::get('/logout', [AuthController::class, 'logout']);
+    Route::apiResource('authors', AuthorController::class);
+    Route::apiResource('books', BookController::class);
+    Route::apiResource('students', StudentController::class);
+    Route::apiResource('borrow_transactions', BorrowTransactionController::class)->only(['index', 'store', 'show']);
+
+    //overdue and return route
+    Route::post(
+        'borrow_transactions/{borrow_transaction}/return',
+        [BorrowTransactionController::class, 'returnBook']
+    );
+    Route::get('borrow_transactions/overdue/list', [BorrowTransactionController::class, 'overdue']);
+});
